@@ -111,8 +111,6 @@ def normalize_shorting_data(
 @st.cache_data(ttl=60 * 60, show_spinner=False)
 def load_shorting_data(ticker, start_date, end_date) -> pd.DataFrame:
     load_project_env()
-    from pykrx import stock
-
     start = _to_yyyymmdd(start_date)
     end = _to_yyyymmdd(end_date)
     debug = {
@@ -126,6 +124,13 @@ def load_shorting_data(ticker, start_date, end_date) -> pd.DataFrame:
         "exception_type": None,
         "exception_message": None,
     }
+    try:
+        from pykrx import stock
+    except Exception as exc:
+        debug["exception_type"] = type(exc).__name__
+        debug["exception_message"] = f"pykrx import failed: {exc}"
+        return _empty_shorting_frame(debug)
+
     try:
         volume_func = getattr(stock, "get_shorting_volume_by_date", None)
         value_func = getattr(stock, "get_shorting_value_by_date", None)

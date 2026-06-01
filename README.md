@@ -37,6 +37,8 @@ APP_ENV=local
 DEBUG_MODE=false
 ```
 
+Streamlit Cloud에서는 `runtime.txt`로 Python 3.11을 사용하도록 지정합니다. `pykrx`가 `pkg_resources`를 사용하므로 `requirements.txt`에 `setuptools`를 포함했습니다.
+
 앱은 설정값을 다음 순서로 읽습니다.
 
 1. Streamlit `st.secrets`
