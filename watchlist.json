@@ -1,0 +1,24 @@
+[
+  {
+    "type": "Stock",
+    "code": "005930",
+    "name": "삼성전자",
+    "market": "KOSPI",
+    "category": "",
+    "provider": "",
+    "memo": "",
+    "added_at": "2026-05-31 21:28",
+    "updated_at": "2026-05-31 21:28"
+  },
+  {
+    "type": "Stock",
+    "code": "000660",
+    "name": "SK하이닉스",
+    "market": "KOSPI",
+    "category": "",
+    "provider": "",
+    "memo": "",
+    "added_at": "2026-05-31 21:28",
+    "updated_at": "2026-05-31 21:28"
+  }
+]

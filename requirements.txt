@@ -1,0 +1,10 @@
+streamlit
+pandas
+numpy
+plotly
+finance-datareader
+pykrx
+requests
+beautifulsoup4
+python-dotenv
+pytest

@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: k-stock-analyzer
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app.py --server.address 0.0.0.0 --server.port $PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEBUG_MODE
+        value: false
