@@ -9,4 +9,6 @@ data/*.db
 data/*.sqlite
 data/corp_codes.*
 logs/
+tools/
+cloudflared*.log
 .DS_Store

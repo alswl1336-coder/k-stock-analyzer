@@ -64,7 +64,7 @@ def get_secret_status(key: str) -> bool:
 
 
 def get_app_config() -> dict:
-    keys = ["NAVER_CLIENT_ID", "NAVER_CLIENT_SECRET", "DART_API_KEY", "KRX_ID", "KRX_PW"]
+    keys = ["NAVER_CLIENT_ID", "NAVER_CLIENT_SECRET", "DART_API_KEY", "KRX_ID", "KRX_PW", "APP_PASSWORD"]
     return {
         "app_env": get_secret("APP_ENV", "local"),
         "debug_mode": get_bool_env("DEBUG_MODE", False),

@@ -1,11 +1,12 @@
 ﻿from __future__ import annotations
 
 import datetime as dt
+import hmac
 
 import pandas as pd
 import streamlit as st
 
-from src.config import get_app_config, load_project_env
+from src.config import get_app_config, get_secret, load_project_env
 
 
 load_project_env()
@@ -141,6 +142,25 @@ def render_deploy_status() -> None:
         st.markdown("**Secrets 설정 여부**")
         st.write(config["secrets"])
         st.caption("API 키와 비밀번호 값은 표시하지 않고 설정 여부만 보여줍니다.")
+
+
+def require_app_password() -> None:
+    password = get_secret("APP_PASSWORD")
+    if not password:
+        st.sidebar.warning("APP_PASSWORD가 설정되지 않았습니다. 외부 공개 전 비밀번호 설정을 권장합니다.")
+        return
+    if st.session_state.get("app_authenticated"):
+        return
+
+    st.title("K-Stock Analyzer")
+    st.caption("접속 비밀번호를 입력해 주세요.")
+    entered = st.text_input("비밀번호", type="password")
+    if st.button("접속"):
+        if hmac.compare_digest(str(entered), str(password)):
+            st.session_state["app_authenticated"] = True
+            st.rerun()
+        st.error("비밀번호가 올바르지 않습니다.")
+    st.stop()
 
 
 def render_composite_score(score: dict) -> None:
@@ -1194,6 +1214,7 @@ def render_financial_sector_tab(stocks: pd.DataFrame) -> None:
 
 
 def main() -> None:
+    require_app_password()
     st.title("K-Stock Analyzer")
     st.caption("한국 주식/ETF 분석 보조 도구")
     render_deploy_status()
