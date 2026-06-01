@@ -69,7 +69,7 @@ INSTITUTION_DETAIL_COLUMNS = ["금융투자", "보험", "투신", "사모", "은
 def _import_pykrx_stock():
     try:
         from pykrx import stock
-    except ImportError as exc:
+    except Exception as exc:
         raise RuntimeError("pykrx가 설치되어 있지 않습니다. pip install -r requirements.txt를 실행해 주세요.") from exc
     return stock
 
@@ -250,7 +250,6 @@ def load_investor_buy_sell_by_date(
     lookback_days: int = 40,
 ) -> pd.DataFrame:
     load_project_env()
-    stock = _import_pykrx_stock()
     requested_start = pd.to_datetime(start_date).date()
     requested_end = pd.to_datetime(end_date).date()
     start = min(requested_start, requested_end - dt.timedelta(days=max(lookback_days, 40)))
@@ -276,6 +275,7 @@ def load_investor_buy_sell_by_date(
         "has_krx_pw": get_secret_status("KRX_PW"),
     }
     try:
+        stock = _import_pykrx_stock()
         try:
             value_df = stock.get_market_trading_value_by_date(start_ymd, end_ymd, ticker, detail=True)
         except TypeError:
@@ -302,11 +302,11 @@ def load_investor_buy_sell_by_date(
 
 @st.cache_data(ttl=60 * 60, show_spinner=False)
 def load_investor_trading_by_date(ticker: str, start_date: str, end_date: str) -> pd.DataFrame:
-    stock = _import_pykrx_stock()
     start = _to_yyyymmdd(start_date)
     end = _to_yyyymmdd(end_date)
 
     try:
+        stock = _import_pykrx_stock()
         value_df = stock.get_market_trading_value_by_date(start, end, ticker)
         volume_df = stock.get_market_trading_volume_by_date(start, end, ticker)
     except Exception:
@@ -456,10 +456,10 @@ def _normalize_ranking_columns(df: pd.DataFrame, market: str) -> pd.DataFrame:
 
 @st.cache_data(ttl=60 * 60, show_spinner=False)
 def load_net_purchase_ranking(start_date: str, end_date: str, market: str, investor: str) -> pd.DataFrame:
-    stock = _import_pykrx_stock()
     investor_name = INVESTOR_RANKING_NAMES.get(investor, investor)
 
     try:
+        stock = _import_pykrx_stock()
         df = stock.get_market_net_purchases_of_equities(
             _to_yyyymmdd(start_date),
             _to_yyyymmdd(end_date),
