@@ -15,7 +15,7 @@ DATA_DIR.mkdir(exist_ok=True)
 
 
 def load_project_env() -> bool:
-    return load_dotenv(dotenv_path=ENV_PATH, override=True)
+    return load_dotenv(dotenv_path=ENV_PATH, override=True, encoding="utf-8-sig")
 
 
 load_project_env()
